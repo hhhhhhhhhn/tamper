@@ -32,10 +32,14 @@ function removeReelsDesktopNavBar() {
 		return true
 	}
 	let navBar = document.getElementsByClassName("x1iyjqo2 xh8yej3")
-	if (navBar.length == 0 || navBar[0].children.length != 6) {
+	if (navBar.length == 0) {
 		return false
 	}
-	removeElement(navBar[0].children[2])
+	let lastNavBar = navBar[navBar.length-1]
+	if (lastNavBar.children.length != 6) {
+		return false
+	}
+	removeElement(lastNavBar.children[2])
 	return true
 }
 
@@ -51,22 +55,13 @@ function removeExploreSuggestions() {
 	return true
 }
 
-function tryForSomeTime(f) {
-	let count = 0
-	let interval = setInterval(() => {
-		if(f() || count > 200) {
-			clearInterval(interval)
-		}
-		count++
-	}, 30)
-}
-
 function onPageLoad() {
 	console.log("Page Load...")
-	tryForSomeTime(removeReelsNavBar)
-	tryForSomeTime(removeReelsDesktopNavBar)
+	removeReelsNavBar()
+	removeReelsDesktopNavBar()
+	setTimeout(removeReelsNavBar, 20)
 	if (location.href.contains("explore")) {
-		tryForSomeTime(removeExploreSuggestions)
+		removeExploreSuggestions()
 	}
 	if (location.href.contains("reels")) {
 		location.href = "https://www.instagram.com"
@@ -74,28 +69,17 @@ function onPageLoad() {
 	}
 }
 
-function onUrlChange(f) {
-	let currentUrl = location.href
-	document.addEventListener("click", () => {
-		let count = 0
-		let interval = setInterval(() => {
-			if (location.href != currentUrl) {
-				currentUrl = location.href
-				f()
-				clearInterval()
-			}
-			if (count > 10) {
-				clearInterval(interval)
-			}
-			count++
-		}, 20)
-		f
+function onDomChange(f) {
+	let observer = new MutationObserver(() => {
+		console.log("CHANGE")
+		f()
 	})
+	observer.observe(document.body, { attributes: true, childList: true })
 }
 
 async function main() {
 	onPageLoad()
-	onUrlChange(onPageLoad)
+	onDomChange(onPageLoad)
 }
 
 (function() {
