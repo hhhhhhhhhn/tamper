@@ -28,19 +28,24 @@ function removeReelsNavBar() {
 
 function removeReelsDesktopNavBar() {
 	console.log("Trying to remove reels desktop")
-	if (location.href.contains("direct")) {
-		return true
-	}
+//	if (location.href.contains("direct")) {
+//		return true
+//	}
 	let navBar = document.getElementsByClassName("x1iyjqo2 xh8yej3")
+	console.log(navBar)
 	if (navBar.length == 0) {
 		return false
 	}
 	let lastNavBar = navBar[navBar.length-1]
-	if (lastNavBar.children.length != 6) {
-		return false
+	if (lastNavBar.children.length == 6) {
+		removeElement(lastNavBar.children[2])
+		return true
 	}
-	removeElement(lastNavBar.children[2])
-	return true
+	if (lastNavBar.children.length == 8) {
+		removeElement(lastNavBar.children[3])
+		return true
+	}
+	return false
 }
 
 function removeExploreSuggestions() {
