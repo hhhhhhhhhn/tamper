@@ -53,8 +53,8 @@ function hideElement(element) {
 }
 
 function removeSponsoredAndRecommendedPosts() {
-	let posts = [...document.querySelectorAll("article")]
-	posts
+	let sponsored = [...document.querySelectorAll("article")]
+	sponsored
 		.filter(x => x.innerText.contains("Follow") || x.innerText.contains("Sponsored"))
 		.forEach(hideElement)
 	let afterEnded = [...document.querySelectorAll("article + div ~ article")]
@@ -77,8 +77,9 @@ function onPageLoad() {
 	console.log("Page Load...")
 	removeReelsNavBar()
 	removeReelsDesktopNavBar()
-	removeSponsoredAndRecommendedPosts()
-	setTimeout(removeReelsNavBar, 20)
+	if (location.href == "https://www.instagram.com" || location.href == "https://www.instagram.com/") {
+		removeSponsoredAndRecommendedPosts()
+	}
 	if (location.href.contains("explore")) {
 		removeExploreSuggestions()
 	}
