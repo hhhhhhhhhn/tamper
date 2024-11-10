@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         New Userscript
+// @name         Instagram
 // @namespace    http://tampermonkey.net/
 // @version      2024-11-08
 // @description  try to take over the world!
@@ -48,6 +48,19 @@ function removeReelsDesktopNavBar() {
 	return false
 }
 
+function hideElement(element) {
+	element.style.opacity = 0.01
+}
+
+function removeSponsoredAndRecommendedPosts() {
+	let posts = [...document.querySelectorAll("article")]
+	posts
+		.filter(x => x.innerText.contains("Follow") || x.innerText.contains("Sponsored"))
+		.forEach(hideElement)
+	let afterEnded = [...document.querySelectorAll("article + div ~ article")]
+	afterEnded.forEach(hideElement)
+}
+
 function removeExploreSuggestions() {
 	if (!location.href.contains("explore")) {
 		return true
@@ -64,13 +77,13 @@ function onPageLoad() {
 	console.log("Page Load...")
 	removeReelsNavBar()
 	removeReelsDesktopNavBar()
+	removeSponsoredAndRecommendedPosts()
 	setTimeout(removeReelsNavBar, 20)
 	if (location.href.contains("explore")) {
 		removeExploreSuggestions()
 	}
 	if (location.href.contains("reels")) {
 		location.href = "https://www.instagram.com"
-
 	}
 }
 
