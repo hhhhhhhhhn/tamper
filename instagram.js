@@ -62,15 +62,8 @@ function removeSponsoredAndRecommendedPosts() {
 }
 
 function removeExploreSuggestions() {
-	if (!location.href.contains("explore")) {
-		return true
-	}
 	let recommended = document.getElementsByClassName("x78zum5 xdt5ytf xwrv7xz x1n2onr6")
-	if (recommended.length == 0) {
-		return false
-	}
-	hideElement(recommended[0])
-	return true
+	;[...recommended].forEach(hideElement)
 }
 
 function onPageLoad() {
@@ -93,7 +86,7 @@ function onDomChange(f) {
 		console.log("CHANGE")
 		f()
 	})
-	observer.observe(document.body, { attributes: true, childList: true })
+	observer.observe(document.body, { attributes: true, childList: true, subtree: true })
 }
 
 async function main() {
