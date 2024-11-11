@@ -65,11 +65,11 @@ function removeExploreSuggestions() {
 	if (!location.href.contains("explore")) {
 		return true
 	}
-	let recommended = document.getElementsByClassName("x78zum5 xdt5ytf x1iyjqo2 xdj266r xkrivgy")
+	let recommended = document.getElementsByClassName("x78zum5 xdt5ytf xwrv7xz x1n2onr6")
 	if (recommended.length == 0) {
 		return false
 	}
-	removeElement(recommended[0])
+	hideElement(recommended[0])
 	return true
 }
 
