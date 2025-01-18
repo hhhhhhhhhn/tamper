@@ -24,6 +24,8 @@ function hideElement(element) {
 function removeFullscreenSuggestions() {
 	let recommended = document.getElementsByClassName("fullscreen-recommendations-wrapper")
 	;[...recommended].forEach(undisplayElement)
+	let box = document.getElementsByClassName("fullscreen-more-videos-endpoint")
+	;[...box].forEach(undisplayElement)
 }
 
 function onPageLoad() {
