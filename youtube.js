@@ -9,8 +9,8 @@
 // @grant        none
 // ==/UserScript==
 
-function removeelement(element) {
-	element.parentelement.removechild(element)
+function removeElement(element) {
+	element.parentElement.removeChild(element)
 }
 
 function undisplayElement(element) {
@@ -28,8 +28,20 @@ function removeFullscreenSuggestions() {
 	;[...box].forEach(undisplayElement)
 }
 
+function removeSubscribedChannels() {
+	let recommended = document.querySelectorAll("ytm-channel-list-sub-menu-renderer")
+	;[...recommended].forEach(undisplayElement)
+}
+
+function removeSearchRecommendations() {
+	let recommended = document.getElementsByClassName("ytSearchboxComponentSuggestionsContainer")
+	;[...recommended].forEach(undisplayElement)
+}
+
 function onPageLoad() {
 	removeFullscreenSuggestions()
+	removeSubscribedChannels()
+	removeSearchRecommendations()
 }
 
 function onDomChange(f) {
