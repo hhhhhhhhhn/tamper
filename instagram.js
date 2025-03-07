@@ -83,7 +83,10 @@ function removeUseApp() {
 
 let limitElement
 function limitScrolling() {
-	if (!limitElement) limitElement = getElementByXpath("//span[contains(., 'all caught up')]")
+	if (!limitElement) {
+		limitElement = getElementByXpath("//span[contains(., 'all caught up')]")
+		limitElement.parentNode.parentNode.parentNode.style.marginBottom = "50000px"
+	}
 	if (!limitElement) return
 	let limit = limitElement.offsetTop - window.innerHeight
 	if (document.body.parentNode.scrollTop > limit) {
