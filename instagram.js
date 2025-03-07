@@ -13,6 +13,16 @@ function removeElement(element) {
 	element.parentElement.removeChild(element)
 }
 
+function getElementByXpath(xp) {
+	return document.evaluate(
+		xp,
+		document,
+		null,
+		XPathResult.FIRST_ORDERED_NODE_TYPE,
+		null
+	).singleNodeValue;
+}
+
 function removeReelsNavBar() {
 	console.log("Trying to remove reels")
 	if (location.href.contains("direct")) {
@@ -66,10 +76,27 @@ function removeExploreSuggestions() {
 	;[...recommended].forEach(hideElement)
 }
 
+function removeUseApp() {
+	let buttons = [...document.querySelectorAll("button")].filter(x => x.innerText.toLowerCase().contains("use the app"))
+	buttons.forEach(el => removeElement(el.parentNode.parentNode))
+}
+
+let limitElement
+function limitScrolling() {
+	if (!limitElement) limitElement = getElementByXpath("//span[contains(., 'all caught up')]")
+	if (!limitElement) return
+	let limit = limitElement.offsetTop - window.innerHeight
+	if (document.body.parentNode.scrollTop > limit) {
+		document.body.parentNode.scrollTop = limit
+		console.log("Scroll limited")
+	}
+}
+
 function onPageLoad() {
 	console.log("Page Load...")
 	removeReelsNavBar()
 	removeReelsDesktopNavBar()
+	removeUseApp()
 	if (location.href == "https://www.instagram.com" || location.href == "https://www.instagram.com/") {
 		removeSponsoredAndRecommendedPosts()
 	}
@@ -90,6 +117,7 @@ function onDomChange(f) {
 }
 
 async function main() {
+	document.addEventListener("scroll", limitScrolling)
 	onPageLoad()
 	onDomChange(onPageLoad)
 }
