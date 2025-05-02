@@ -1,12 +1,14 @@
 // ==UserScript==
-// @name         Youtube
-// @namespace    http://tampermonkey.net/
-// @version      2024-11-08
-// @description  This is meant to be used alongside Unhook
-// @author       You
-// @match        https://*.youtube.com/*
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @grant        none
+// @name           Youtube
+// @namespace      http://tampermonkey.net/
+// @version        2024-11-08
+// @description    This is meant to be used alongside Unhook
+// @author         You
+// @match          https://*.youtube.com/*
+// @exclude-match  https://*.music.youtube.com/*
+// @icon           data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
+// @grant          GM_getValue
+// @grant          GM_setValue
 // ==/UserScript==
 
 function removeElement(element) {
@@ -44,13 +46,13 @@ function onPageLoad() {
 	removeSearchRecommendations()
 }
 
-let url = location.href
+let url = location.pathname + location.search
 function onDomChange(f) {
 	let observer = new MutationObserver(() => {
-		console.log("CHANGE")
-		if (location.href != url) {
-			url = location.href
-			console.log("NAVIGATE")
+		//console.log("CHANGE")
+		if (location.pathname + location.search != url) {
+			url = location.pathname + location.search
+			//console.log("NAVIGATE")
 			document.dispatchEvent(new CustomEvent("urlchanged"))
 		}
 		f()
@@ -58,8 +60,21 @@ function onDomChange(f) {
 	observer.observe(document.body, { attributes: true, childList: true, subtree: true })
 }
 
+let is24Enabled = GM_getValue("24enabled", true)
+
 function handleNavigation() {
-	if(location.href.includes("watch") && navigator.userAgentData.mobile) {
+	if(url.includes("enable24") && !is24Enabled) {
+		GM_setValue("24enabled", true)
+		is24Enabled = true
+		alert("24 enabled")
+	}
+	if(url.includes("disable24") && is24Enabled) {
+		GM_setValue("24enabled", false)
+		is24Enabled = false
+		alert("24 disabled")
+	}
+	// Make the use solve a 24 hand
+	if(url.includes("watch") && navigator.userAgentData.mobile && is24Enabled) {
 		document.querySelectorAll("video").forEach(v => v.pause())
 		document.querySelectorAll("audio").forEach(v => v.pause())
 		while (true) {
