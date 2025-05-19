@@ -23,5 +23,6 @@ let observer = new MutationObserver(() => {
 observer.observe(document.body, { attributes: true, childList: true, subtree: true })
 
 function onDomChange(f) {
-  domchangelisteners.push(f)
+	document.addEventListener("DOMContentLoaded", f)
+	domchangelisteners.push(f)
 }
