@@ -12,17 +12,23 @@ function removeElement(el) {
 }
 
 let domchangelisteners = []
-let url = location.pathname + location.search
-let observer = new MutationObserver(() => {
-	if (location.pathname + location.search != url) {
-		url = location.pathname + location.search
-		document.dispatchEvent(new CustomEvent("urlchanged"))
-	}
-	domchangelisteners.forEach(f => f())
-})
-observer.observe(document.body, { attributes: true, childList: true, subtree: true })
+let urlchangelisteners = []
 
 function onDomChange(f) {
 	document.addEventListener("DOMContentLoaded", f)
 	domchangelisteners.push(f)
 }
+
+function onUrlChange(f) {
+	urlchangelisteners.push(f)
+}
+
+let url = location.pathname + location.search
+let observer = new MutationObserver(() => {
+	if (location.pathname + location.search != url) {
+		url = location.pathname + location.search
+		urlchangelisteners.forEach(f => f())
+	}
+	domchangelisteners.forEach(f => f())
+})
+observer.observe(document.body, { attributes: true, childList: true, subtree: true })
