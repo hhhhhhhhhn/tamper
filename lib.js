@@ -11,6 +11,14 @@ function removeElement(el) {
   el.parentElement.removeChild(el)
 }
 
+function undisplayElement(element) {
+	element.style.display = "none"
+}
+
+function hideElement(element) {
+	element.style.opacity = 0.01
+}
+
 let domchangelisteners = []
 let urlchangelisteners = []
 
