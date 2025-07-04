@@ -9,20 +9,9 @@
 // @icon           data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant          GM_getValue
 // @grant          GM_setValue
+// @grant          GM_info
+// @require        https://github.com/hhhhhhhhhn/tamper/raw/refs/heads/dev/lib.user.js
 // ==/UserScript==
-
-function removeElement(element) {
-	element.parentElement.removeChild(element)
-}
-
-function undisplayElement(element) {
-	element.style.display = "none"
-}
-
-function hideElement(element) {
-	element.style.opacity = 0.01
-}
-
 function removeFullscreenSuggestions() {
 	let recommended = document.getElementsByClassName("fullscreen-recommendations-wrapper")
 	;[...recommended].forEach(undisplayElement)
@@ -40,28 +29,36 @@ function removeSearchRecommendations() {
 	;[...recommended].forEach(undisplayElement)
 }
 
-function onPageLoad() {
+function removeDistractions() {
 	removeFullscreenSuggestions()
 	removeSubscribedChannels()
 	removeSearchRecommendations()
 }
 
-let url = location.pathname + location.search
-function onDomChange(f) {
-	let observer = new MutationObserver(() => {
-		//console.log("CHANGE")
-		if (location.pathname + location.search != url) {
-			url = location.pathname + location.search
-			//console.log("NAVIGATE")
-			document.dispatchEvent(new CustomEvent("urlchanged"))
-		}
-		f()
-	})
-	observer.observe(document.body, { attributes: true, childList: true, subtree: true })
-}
-
 let is24Enabled = GM_getValue("24enabled", true)
 
+function ask24Problem() {
+	document.querySelectorAll("video").forEach(v => v.pause())
+	document.querySelectorAll("audio").forEach(v => v.pause())
+	while (true) {
+		let hand = generate24Problem()
+		let answer = prompt("Solve this 24 hand: " + hand.map(String).join(", "))
+		if (is24SolutionHorrible(answer, hand) || answer == "override") {
+			break
+		}
+	}
+}
+
+function isMobile() {
+	return location.href.includes("m.youtube")
+}
+
+function getVideoTime() {
+	return document.querySelector("video")?.currentTime || NaN
+}
+
+// In which playtime to ask another 24 problem
+let nextVideoInTime
 function handleNavigation() {
 	if(url.includes("enable24") && !is24Enabled) {
 		GM_setValue("24enabled", true)
@@ -74,18 +71,20 @@ function handleNavigation() {
 		alert("24 disabled")
 	}
 	// Make the use solve a 24 hand
-	if(url.includes("watch") && navigator.userAgentData.mobile && is24Enabled) {
-		document.querySelectorAll("video").forEach(v => v.pause())
-		document.querySelectorAll("audio").forEach(v => v.pause())
-		while (true) {
-			let hand = generate24Problem()
-			let answer = prompt("Solve this 24 hand: " + hand.map(String).join(", "))
-			if (is24SolutionHorrible(answer, hand) || answer == "override") {
-				break
-			}
-		}
+	if(url.includes("watch") && isMobile() && is24Enabled) {
+		ask24Problem()
+		nextVideoInTime = 10*60
 	}
 }
+
+setInterval(() => {
+	if (getVideoTime() > nextVideoInTime && isMobile() && is24Enabled) {
+		ask24Problem()
+		for (let safety = 0; getVideoTime() > nextVideoInTime && safety < 100; safety++) {
+			nextVideoInTime += 10*60
+		}
+	}
+}, 5000)
 
 let id = e => e
 async function main() {
@@ -93,9 +92,9 @@ async function main() {
 		window.trustedTypes.createPolicy("default", {createHTML: id, createScript: id, createScriptURL: id})
 	}catch {}
 	handleNavigation()
-	document.addEventListener("urlchanged", handleNavigation) // Custom event, defined above
-	onPageLoad()
-	onDomChange(onPageLoad)
+	onUrlChange(() => {console.log("url changed"); handleNavigation()})
+	removeDistractions()
+	onDomChange(removeDistractions)
 }
 
 (function() {
