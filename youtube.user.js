@@ -35,7 +35,11 @@ function removeDistractions() {
 	removeSearchRecommendations()
 }
 
-let is24Enabled = GM_getValue("24enabled", true)
+let dateForAsking24 = new Date(GM_getValue("24date", "2000"))
+
+function is24Enabled() {
+	return new Date() > dateForAsking24
+}
 
 function ask24Problem() {
 	document.querySelectorAll("video").forEach(v => v.pause())
@@ -60,25 +64,25 @@ function getVideoTime() {
 // In which playtime to ask another 24 problem
 let nextVideoInTime
 function handleNavigation() {
-	if(url.includes("enable24") && !is24Enabled) {
-		GM_setValue("24enabled", true)
-		is24Enabled = true
+	if(url.includes("enable24") && !is24Enabled()) {
+		dateForAsking24 = new Date()
+		GM_setValue("24date", dateForAsking24.toISOString())
 		alert("24 enabled")
 	}
 	if(url.includes("disable24") && is24Enabled) {
-		GM_setValue("24enabled", false)
-		is24Enabled = false
+		dateForAsking24 = new Date(Date.now() + 60*60*1000)
+		GM_setValue("24date", dateForAsking24.toISOString())
 		alert("24 disabled")
 	}
 	// Make the use solve a 24 hand
-	if(url.includes("watch") && isMobile() && is24Enabled) {
+	if(url.includes("watch") && isMobile() && is24Enabled()) {
 		ask24Problem()
 		nextVideoInTime = 10*60
 	}
 }
 
 setInterval(() => {
-	if (getVideoTime() > nextVideoInTime && isMobile() && is24Enabled) {
+	if (getVideoTime() > nextVideoInTime && isMobile() && is24Enabled()) {
 		ask24Problem()
 		for (let safety = 0; getVideoTime() > nextVideoInTime && safety < 100; safety++) {
 			nextVideoInTime += 10*60
