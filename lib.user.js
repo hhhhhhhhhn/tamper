@@ -23,6 +23,7 @@ let domchangelisteners = []
 let urlchangelisteners = []
 
 function onDomChange(f) {
+	f()
 	document.addEventListener("DOMContentLoaded", f)
 	domchangelisteners.push(f)
 }
