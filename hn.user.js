@@ -9,8 +9,8 @@
 // @require        https://github.com/hhhhhhhhhn/tamper/raw/refs/heads/dev/lib.user.js
 // ==/UserScript==
 
-let ignore = ["AI", "Grok", "Gemini", "LLM", "ML", "Deep", "MCP", "Llama", "Ollama"]
-let ignoreCaseless = ["prompt", "model", "agent", "context engin", "vibe cod", "vibe-cod"]
+let ignore = ["AI", "Grok", "Gemini", "LLM", "ML", "Deep", "MCP", "Llama", "Ollama", "GPT", "RL", "Devin"]
+let ignoreCaseless = ["prompt", "model", "agent", "context engin", "vibe cod", "vibe-cod", "neural"]
 
 function shouldIgnore(text) {
 	for(let word of ignore) {
