@@ -14,5 +14,6 @@ onDomChange(() => {
 	[...document.querySelectorAll(".AppHeader-CopilotChat")].forEach(removeElement);
 	[...document.querySelectorAll("ul:has(> li[data-command-name=\"search-copilot-chat\"])")]
 		.forEach(e => {removeElement(e.previousSibling.previousSibling); removeElement(e)});
-	[...document.querySelectorAll(".ActionListItem")].filter(e => e.textContent.includes("Copilot")).map(removeElement)
+	[...document.querySelectorAll(".ActionListItem")].filter(e => e.textContent.includes("Copilot")).map(removeElement);
+	[...document.querySelectorAll(".prc-ActionList-ActionListItem-uq6I7")].filter(e => e.textContent.includes("Copilot")).map(removeElement);
 })
