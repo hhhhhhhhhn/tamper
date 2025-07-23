@@ -29,10 +29,15 @@ function removeSearchRecommendations() {
 	;[...recommended].forEach(undisplayElement)
 }
 
+function removeMetrics() {
+	[...document.querySelectorAll("#metadata-line")].forEach(removeElement)
+}
+
 function removeDistractions() {
 	removeFullscreenSuggestions()
 	removeSubscribedChannels()
 	removeSearchRecommendations()
+	removeMetrics()
 }
 
 let dateForAsking24 = new Date(GM_getValue("24date", "2000"))
