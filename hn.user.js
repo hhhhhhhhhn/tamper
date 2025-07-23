@@ -9,7 +9,7 @@
 // @require        https://github.com/hhhhhhhhhn/tamper/raw/refs/heads/dev/lib.user.js
 // ==/UserScript==
 
-let ignore = ["AI", "Grok", "Gemini", "LLM", "ML", "Deep", "MCP", "Llama", "Ollama", "GPT", "RL", "Devin"]
+let ignore = ["AI", "Grok", "Gemini", "LLM", "ML", "Deep", "MCP", "Llama", "Ollama", "GPT", "RL", "Devin", ".ai"]
 let ignoreCaseless = ["prompt", "model", "agent", "context engin", "vibe cod", "vibe-cod", "neural"]
 
 function shouldIgnore(text) {
@@ -23,12 +23,15 @@ function shouldIgnore(text) {
 	return false
 }
 
-(() => {
-	[...document.querySelectorAll(".submission")]
-		.filter(e => shouldIgnore(e.textContent))
-		.forEach(e => {
-			undisplayElement(e)
-			undisplayElement(e.nextElementSibling)
-			undisplayElement(e.nextElementSibling.nextElementSibling)
-		})
-})()
+[...document.querySelectorAll(".submission")]
+	.filter(e => shouldIgnore(e.textContent))
+	.forEach(e => {
+		undisplayElement(e)
+		undisplayElement(e.nextElementSibling)
+		undisplayElement(e.nextElementSibling.nextElementSibling)
+	});
+[...document.querySelectorAll(".score")].forEach(removeElement);
+[...document.querySelectorAll(".age")].forEach(removeElement);
+[...document.querySelectorAll("a")].filter(e => e.textContent.includes("comment") && e.getAttribute("href").includes("item?id"))
+	.forEach(e => e.innerHTML = "comments")
+
