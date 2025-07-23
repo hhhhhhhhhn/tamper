@@ -30,7 +30,8 @@ function removeSearchRecommendations() {
 }
 
 function removeMetrics() {
-	[...document.querySelectorAll("#metadata-line")].forEach(removeElement)
+	[...document.querySelectorAll("#metadata-line")].forEach(removeElement);
+	[...document.querySelectorAll("#info-container")].forEach(removeElement);
 }
 
 function removeDistractions() {
