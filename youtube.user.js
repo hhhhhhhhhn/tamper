@@ -29,6 +29,11 @@ function removeSearchRecommendations() {
 	;[...recommended].forEach(undisplayElement)
 }
 
+function removeWatchedPreview() {
+	[...document.querySelectorAll("ytm-thumbnail-overlay-resume-playback-renderer")].forEach(removeElement);
+	[...document.querySelectorAll("ytd-thumbnail-overlay-resume-playback-renderer")].forEach(removeElement);
+}
+
 function removeMetrics() {
 	[...document.querySelectorAll("#metadata-line")].forEach(removeElement);
 	[...document.querySelectorAll("#info-container")].forEach(removeElement);
@@ -50,6 +55,7 @@ function removeDistractions() {
 	removeSubscribedChannels()
 	removeSearchRecommendations()
 	removeMetrics()
+	removeWatchedPreview()
 }
 
 let dateForAsking24 = new Date(GM_getValue("24date", "2000"))
