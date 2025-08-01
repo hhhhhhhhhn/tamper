@@ -8,15 +8,18 @@
 // @description 5/19/2025, 12:20:38 AM
 // ==/UserScript==
 function removeElement(el) {
-  el.parentElement.removeChild(el)
+	if (!el) return;
+	el.parentElement.removeChild(el)
 }
 
-function undisplayElement(element) {
-	element.style.display = "none"
+function undisplayElement(el) {
+	if (!el) return;
+	el.style.display = "none"
 }
 
-function hideElement(element) {
-	element.style.opacity = 0.01
+function hideElement(el) {
+	if (!el) return;
+	el.style.opacity = 0.01
 }
 
 let domchangelisteners = []
