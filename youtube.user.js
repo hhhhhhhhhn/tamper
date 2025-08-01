@@ -34,6 +34,7 @@ function removeMetrics() {
 	[...document.querySelectorAll("#info-container")].forEach(removeElement);
 	[...document.querySelectorAll("ytm-badge-and-byline-renderer")]
 		.forEach(e => {removeElement(e.children.item(2)); removeElement(e.children.item(1))});
+	[...document.querySelectorAll(".subhead")].forEach(removeElement);
 }
 
 function removeComments() {
