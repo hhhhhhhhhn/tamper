@@ -37,16 +37,18 @@ function removeMetrics() {
 }
 
 function removeComments() {
-	[...document.querySelectorAll("ytm-item-section-renderer")].forEach(removeElement);
 	[...document.querySelectorAll("ytd-comments")].forEach(removeElement);
+	if(location.href.includes("watch")) {
+		[...document.querySelectorAll("ytm-item-section-renderer")].forEach(undisplayElement);
+	}
 }
 
 function removeDistractions() {
+	removeComments()
 	removeFullscreenSuggestions()
 	removeSubscribedChannels()
 	removeSearchRecommendations()
 	removeMetrics()
-	removeComments()
 }
 
 let dateForAsking24 = new Date(GM_getValue("24date", "2000"))
