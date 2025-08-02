@@ -40,6 +40,9 @@ function removeMetrics() {
 	[...document.querySelectorAll("ytm-badge-and-byline-renderer")]
 		.forEach(e => {removeElement(e.children.item(2)); removeElement(e.children.item(1))});
 	[...document.querySelectorAll(".subhead")].forEach(removeElement);
+	[...document.querySelectorAll(".secondary-text")].forEach(removeElement);
+	[...document.querySelectorAll(".factoids")].forEach(removeElement);
+	[...document.querySelectorAll(".yt-spec-button-shape-next__button-text-content")].forEach(undisplayElement);
 }
 
 function removeComments() {
@@ -49,6 +52,12 @@ function removeComments() {
 	}
 }
 
+// Unhooks fucks the title for some reason
+function fixTitle() {
+	[...document.querySelectorAll(".related-chips-slot-wrapper.slot-open")]
+		.forEach(e => e.style.transform = "translateY(0)")
+}
+
 function removeDistractions() {
 	removeComments()
 	removeFullscreenSuggestions()
@@ -56,6 +65,7 @@ function removeDistractions() {
 	removeSearchRecommendations()
 	removeMetrics()
 	removeWatchedPreview()
+	fixTitle()
 }
 
 let dateForAsking24 = new Date(GM_getValue("24date", "2000"))
