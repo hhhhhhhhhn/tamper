@@ -15,6 +15,8 @@
 function removeFullscreenSuggestions() {
 	let recommended = document.getElementsByClassName("fullscreen-recommendations-wrapper")
 	;[...recommended].forEach(undisplayElement)
+	let recommended2 = document.getElementsByClassName("ytFullscreenVideoRecommendationsHost")
+	;[...recommended2].forEach(undisplayElement)
 	let box = document.getElementsByClassName("fullscreen-more-videos-endpoint")
 	;[...box].forEach(undisplayElement)
 }
@@ -71,7 +73,8 @@ function removeDistractions() {
 let dateForAsking24 = new Date(GM_getValue("24date", "2000"))
 
 function is24Enabled() {
-	return new Date() > dateForAsking24
+	return false
+	// return new Date() > dateForAsking24
 }
 
 function ask24Problem() {
